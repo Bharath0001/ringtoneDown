@@ -1,0 +1,41 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import SearchBar from "../components/searchBar";
+import AudioCard from "../components/audioCard";
+
+function MovieRingtonePage() {
+    
+    const { movieId } = useParams();
+    const [audioCard, setAudioCard] = useState([]);
+    console.log(audioCard);
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/movie/${movieId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                setAudioCard(data.ringtones);
+            })
+            .catch((error) => console.error("Error fetching ringtoneCard info", error));
+    }, [movieId]);
+       
+    return (
+        <>
+            <div className="min-h-screen text-white">
+                <SearchBar />
+                <div className="max-w-6xl mx-auto pt-24 px-4">
+                    <h2 className="text-2xl font-bold mb-4 ">{audioCard[0]?.movie?.title ?? "Loading..."} Ringtones</h2>
+                    <div className="grid grid-cols md:grid-cols-3 lg:grid-cols-3 gap-4">
+                        {audioCard.map((ringtone)=>
+                            (
+                                <AudioCard key={ringtone._id} ringtone={ringtone} />
+                            ))}
+                    </div>
+                </div>
+            </div>
+        </>
+    );  
+}
+
+
+export default MovieRingtonePage;

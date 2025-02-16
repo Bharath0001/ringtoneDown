@@ -1,10 +1,10 @@
 const express = require("express");
-const { getHomePage } = require("../controller/dataController");
+const { getHomePage, getRingtones } = require("../controller/dataController");
 
 
 const router = express.Router();
 
 router.get("/",getHomePage);
-// router.get("/ringtones/:movieId", getRingtones);
+router.get("/movie/:movieId", getRingtones);
 
 module.exports = router;

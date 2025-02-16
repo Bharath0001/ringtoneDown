@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ringtone = new mongoose.Schema(
+const Ringtone = new mongoose.Schema(
     {
       movieId: { type: Number, ref: "Movie", required: true }, 
       name: { type: String, required: true },
@@ -11,5 +11,5 @@ const ringtone = new mongoose.Schema(
     { collection: "z_ringtone"}
   );
   
-  module.exports = mongoose.model("Ringtone", ringtone);
+  module.exports = mongoose.model("Ringtone", Ringtone);
   

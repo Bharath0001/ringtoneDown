@@ -2,34 +2,44 @@ const Movie = require("../models/movieCard");
 const Ringtone = require("../models/ringtone");
 
 
+const getRingtonesWithMovies = async (filter = {}, sort = {}, limit = 0 ) => {
+    const pipeline = [
+        { $match: filter }, 
+        {
+            $lookup: {
+                from: "z_movie", 
+                localField: "movieId",
+                foreignField: "_id",
+                pipeline: [{ $project: { title: 1, image: 1 } }],
+                as: "movieDetails"
+            }
+        },
+        { $sort: sort }, 
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                audioUrl: 1,
+                clicks: 1,
+                movie: {
+                    title: { $arrayElemAt: ["$movieDetails.title", 0] },
+                    imageUrl: { $arrayElemAt: ["$movieDetails.image", 0] }
+                }
+            }
+        }
+    ];
+    if (limit > 0) {
+        pipeline.push({ $limit: limit });
+    }
+    return await Ringtone.aggregate(pipeline);
+};
 const getHomePage = async(req, res) => {
     try{
         const recentMovies = await Movie.find()
-            .sort({ createdAt: -1 }) // Sort by newest first
-            .limit(5); // Fetch only 4 movies
+            .sort({ _id: -1 }) // Sort by newest first
+            .limit(8); // Fetch only 4 movies
 
-        const popularRingtones = await Ringtone.aggregate([
-            {
-                $lookup: {
-                    from: "z_movie",
-                    localField: "movieId",
-                    foreignField: "_id",
-                    pipeline: [{ $project: { title: 1 }}],
-                    as: "movieDetails"
-                }
-            },
-            { $sort: { downloads: -1 } },
-            { $limit: 6 },
-            {
-                $project: {
-                    _id: 1,
-                    name: 1,
-                    audioUrl: 1,
-                    clicks: 1,
-                    movieName: { $arrayElemAt: ["$movieDetails.title", 0]}
-                }
-            }
-        ]); 
+        const popularRingtones = await getRingtonesWithMovies( {}, { clicks: -1 }, 6);
 
         res.json({recentMovies, popularRingtones});
     } catch (error) {
@@ -38,26 +48,53 @@ const getHomePage = async(req, res) => {
     }
 };
 
-const getMovies = async (req, res) => {
-    try {
-        const movies = await MovieCard.find();
-        res.json(movies);
-    } catch (error) {
-        res.status(500).json({ error: "Failed to fetch movies" });
-    }
-};
-
 const getRingtones = async (req, res) => {
     try {
-        const { movieId } = req.params;
-        const ringtones = await Ringtone.find({ movieId });
-        res.json(ringtones);
+        let { movieId } = req.params;
+
+        movieId = isNaN(movieId) ? movieId : Number(movieId);
+
+        const movie = await Movie.findById(movieId, { title: 1, image: 1 });
+        if (!movie) {
+            return res.status(404).json({ error: "Movie not found" });
+        }
+
+        const ringtones = await Ringtone.aggregate([
+            { $match: { movieId: movieId } }, 
+            {
+                $lookup: {
+                    from: "z_movie", 
+                    localField: "movieId",
+                    foreignField: "_id", 
+                    as: "movieDetails"
+                }
+            },
+            { $unwind: "$movieDetails" }, 
+            {
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    audioUrl: 1,
+                    clicks: 1,
+                    movie: {
+                        title: "$movieDetails.title",
+                        imageUrl: "$movieDetails.image"
+                    }
+                }
+            }
+        ]);
+
+        if (!ringtones.length) {
+            return res.status(404).json({ message: "No ringtones found for this movie" });
+        }
+        res.json({ ringtones });
+
     } catch (error) {
+        console.error("Error fetching ringtones:", error);
         res.status(500).json({ error: "Failed to fetch ringtones" });
     }
 };
 
 
 
-
-module.exports = { getHomePage };
+module.exports = { getHomePage, getRingtones };
