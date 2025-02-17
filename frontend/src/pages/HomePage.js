@@ -11,7 +11,7 @@ function HomePage() {
     const navigate = useNavigate();
   
     useEffect(() => {
-      fetch("http://localhost:5000/")
+      fetch("https://ringtonedown.onrender.com/")
         .then((response) => response.json())
         .then((data) => {
           setRecentMovies(data.recentMovies);
@@ -30,7 +30,7 @@ function HomePage() {
           <div className="mb-8">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold mb-4 ">Recently Uploaded</h2>
-              <button className="text-gray-300 hover:text-white mb-4">All Uploades</button>
+              {/* <button className="text-gray-300 hover:text-white mb-4">All Uploades</button> */}
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-x-10 gap-y-4 sm:gap-x-2 md:gap-x-10">
               {recentMovies.map((movie) => (
@@ -43,7 +43,7 @@ function HomePage() {
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold">Popular Ringtones</h2>
-              <button className="text-gray-300 hover:text-white ">Show More</button>
+              {/* <button className="text-gray-300 hover:text-white ">Show More</button> */}
             </div>
             <div className="grid grid-cols md:grid-cols-3 lg:grid-cols-3 gap-4">
               {popularRingtones.map((ringtone)=>
