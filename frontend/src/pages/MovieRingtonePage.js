@@ -22,7 +22,7 @@ function MovieRingtonePage() {
     return (
         <>
             <div className="min-h-screen text-white ">
-                <div className="text-3xl font-bold sticky top-0 bg-black py-3 text-center">
+                <div className="text-3xl font-bold sticky top-0 bg-black py-3 text-center z-50">
                     <a href="https://ringtown.netlify.app/" className="hover:text-gray-300 transition">Ringtown</a>
                 </div>
                 <SearchBar />
