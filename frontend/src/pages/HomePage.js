@@ -22,6 +22,9 @@ function HomePage() {
     
     return (
       <div className="min-h-screen text-white">
+        <div className="text-3xl font-bold sticky top-0 bg-black py-3 text-center">
+          <a href="https://ringtown.netlify.app/" className="hover:text-gray-300 transition">Ringtown</a>
+        </div>
         <SearchBar />
   
         <div className="max-w-6xl mx-auto pt-24 px-4">

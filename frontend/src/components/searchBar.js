@@ -62,7 +62,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-20 w-full fixed top-4 left-0 z-50">
+    <div className="flex justify-center items-center h-20 w-full fixed top-11 left-0 z-50">
       <div className="relative w-[90%] md:w-[80%] md:mx-[10%]">
         <div className="absolute inset-0 bg-white/10 backdrop-blur-lg shadow-lg rounded-full"></div>
 
