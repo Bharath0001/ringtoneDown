@@ -22,8 +22,11 @@ function MovieRingtonePage() {
     return (
         <>
             <div className="min-h-screen text-white ">
+                <div className="text-3xl font-bold sticky top-0 bg-black py-3 text-center">
+                    <a href="https://ringtown.netlify.app/" className="hover:text-gray-300 transition">Ringtown</a>
+                </div>
                 <SearchBar />
-                <div className="max-w-6xl mx-auto pt-24 px-4 py-4">
+                <div className="max-w-6xl mx-auto pt-24 px-4">
                     <h2 className="text-2xl font-bold mb-4 ">{audioCard.length > 0 ? `${audioCard[0]?.movie?.title ?? "Loading..."}`: "No ringtones for this movie" } Ringtones</h2>
                     <div className="grid grid-cols md:grid-cols-3 lg:grid-cols-3 gap-4">
                         {audioCard.map((ringtone)=>
