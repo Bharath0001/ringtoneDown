@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const rateLimit = require("express-rate-limit");
 
 const routes = require("./routes/api");
 
@@ -11,7 +12,14 @@ app.use(express.json());
 
 connectDB();
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 15, 
+    message: { error: "Too many downloads from this IP, please try again later." },
+    headers: true,
+});
 
+app.use(limiter)
 app.use("/", routes);
 
 
