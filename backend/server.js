@@ -14,7 +14,7 @@ connectDB();
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
-    max: 15, 
+    max: 50, 
     message: { error: "Too many downloads from this IP, please try again later." },
     headers: true,
 });
