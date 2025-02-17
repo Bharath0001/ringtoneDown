@@ -1,7 +1,8 @@
+require('dotenv').config();
 const mongoose = require("mongoose");
 
 
-const MONGO_URI = "mongodb+srv://melophilemusics:ZTjDE0Twwf50ZjoJ@cluster0.gxqa4.mongodb.net/ringtoneDown?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URI = process.env.MONGO_URI;
 
 const connectDB = async () => {
     try {

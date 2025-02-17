@@ -83,10 +83,7 @@ const getRingtones = async (req, res) => {
                 }
             }
         ]);
-
-        if (!ringtones.length) {
-            return res.status(404).json({ message: "No ringtones found for this movie" });
-        }
+        
         res.json({ ringtones });
 
     } catch (error) {
@@ -95,6 +92,55 @@ const getRingtones = async (req, res) => {
     }
 };
 
+const searchItems = async (req, res) => {
+    try {
+        const query = req.query.query?.trim();
+        if (!query) {
+            return res.status(400).json({ error: "Search query is required" });
+        }
+
+        const searchRegex = new RegExp(query, "i");
+
+        const movies = await Movie.find({ title: searchRegex })
+            .limit(5)
+            .select("title image");
+
+        const ringtones = await Ringtone.aggregate([
+            {
+                $match: { name: searchRegex }
+            },
+            {
+                $lookup: {
+                    from: "z_movie",
+                    localField: "movieId",
+                    foreignField: "_id",
+                    as: "movieDetails"
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    audioUrl: 1,
+                    clicks: 1,
+                    movieId: 1
+                }
+            }
+        ]);
+
+        const results = [
+            ...movies.map((movie) => ({ type: "movie", ...movie.toObject() })),
+            ...ringtones.map((ringtone) => ({ type: "ringtone", ...ringtone }))
+        ];
+
+        res.json({ results });
+    } catch (error) {
+        console.error("Search error:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
 
 
-module.exports = { getHomePage, getRingtones };
+
+
+module.exports = { getHomePage, getRingtones, searchItems };
