@@ -34,10 +34,10 @@ const getRingtonesWithMovies = async (filter = {}, sort = {}, limit = 0 ) => {
     return await Ringtone.aggregate(pipeline);
 };
 const getHomePage = async(req, res) => {
-    try{
+    try{ 
         const recentMovies = await Movie.find()
             .sort({ _id: -1 }) // Sort by newest first
-            .limit(8); // Fetch only 4 movies
+            .limit(8); // Fetch only 8 movies
 
         const popularRingtones = await getRingtonesWithMovies( {}, { clicks: -1 }, 6);
 

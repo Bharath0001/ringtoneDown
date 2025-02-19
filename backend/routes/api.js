@@ -4,7 +4,7 @@ const { getHomePage, getRingtones, searchItems } = require("../controller/dataCo
 
 const router = express.Router();
 
-router.get("/",getHomePage);
+router.get("/",getHomePage); 
 router.get("/movie/:movieId", getRingtones);
 router.get("/search", searchItems);
 

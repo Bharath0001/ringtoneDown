@@ -5,13 +5,15 @@ import MovieCard from "../components/movieCard";
 import SearchBar from "../components/searchBar";
 import AudioCard from "../components/audioCard";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function HomePage() { 
     const [recentMovies, setRecentMovies] = useState([]);
     const [popularRingtones, setPopularRingtones] = useState([]);
     const navigate = useNavigate();
   
     useEffect(() => {
-      fetch("https://ringtonedown.onrender.com/")
+      fetch(`${API_URL}`)
         .then((response) => response.json())
         .then((data) => {
           setRecentMovies(data.recentMovies);
