@@ -13,7 +13,7 @@ function MovieRingtonePage() {
     console.log(audioCard);
 
     useEffect(() => {
-        fetch(`${API_URL}/${movieId}`)
+        fetch(`${API_URL}movie/${movieId}`)
             .then((res) => res.json())
             .then((data) => {
                 setAudioCard(data.ringtones);

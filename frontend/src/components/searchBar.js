@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import DOMPurify from "dompurify"; 
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const SearchBar = () => {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
@@ -23,7 +25,7 @@ const SearchBar = () => {
         return;
     }
 
-    fetch(`https://ringtonedown.onrender.com/search?query=${encodeURIComponent(sanitizedSearch)}`)
+    fetch(`${API_URL}search?query=${encodeURIComponent(sanitizedSearch)}`)
         .then((res) => res.json())
         .then((data) => {
             const filteredResults = data.results.reduce(
