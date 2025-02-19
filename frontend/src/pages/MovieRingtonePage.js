@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import SearchBar from "../components/searchBar";
 import AudioCard from "../components/audioCard";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function MovieRingtonePage() {
     
     const { movieId } = useParams();
@@ -11,7 +13,7 @@ function MovieRingtonePage() {
     console.log(audioCard);
 
     useEffect(() => {
-        fetch(`https://ringtonedown.onrender.com/movie/${movieId}`)
+        fetch(`${API_URL}/${movieId}`)
             .then((res) => res.json())
             .then((data) => {
                 setAudioCard(data.ringtones);
